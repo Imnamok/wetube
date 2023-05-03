@@ -4,16 +4,28 @@ const PORT = 4000;
 
 const app = express();
 
-const handleHome = (req, res) => {
-  return res.send("I still love you");
+const routerLogger = (req, res, next) => {
+  console.log("Path :", req.path);
+  next();
 };
 
-const handleLogin = (req, res) => {
-  return res.send("Login here.");
+const methodLogger = (req, res, next) => {
+  console.log("Method :", req.method);
+  next();
 };
 
-app.get("/", handleHome);
-app.get("/login", handleLogin);
+const home = (req, res, next) => {
+  console.log("I will respond.");
+  return res.send("hello");
+};
+
+const login = (req, res) => {
+  return res.send("login");
+};
+
+app.use(methodLogger, routerLogger);
+app.get("/", home);
+app.get("/login", login);
 
 const handleListening = () => console.log(`Server listenting on port http://localhost:${PORT}`);
 
